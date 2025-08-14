@@ -32,100 +32,112 @@ export function HeroSection() {
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black">
-      {/* Slightly reduced side gaps */}
-      <div className="w-full max-w-[1400px] mx-auto px-3 sm:px-5 lg:px-6 py-20">
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
-          {/* Left Text Section */}
+      <div className="w-full max-w-[1400px] mx-auto px-3 sm:px-5 lg:px-6 py-10 lg:py-20">
+        {/* Mobile: Image with text overlay | Desktop: Side-by-side */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          
+          {/* Image with overlay text for mobile */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="relative order-1 lg:order-2"
+          >
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl w-full h-[450px] sm:h-[500px] lg:h-[500px]">
+              <Image
+                src={sliderImages[currentImage]}
+                alt="Luxury Bedroom"
+                fill
+                className="object-cover transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-black/40"></div>
+
+              {/* Overlay text only on mobile/tablet */}
+              <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 lg:hidden">
+                <h1 className="text-3xl sm:text-4xl font-bold leading-tight text-white">
+                  <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                    Feel the Comfort of
+                  </span>{" "}
+                  <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                    Resting Comfortably
+                  </span>{" "}
+                  <span className="text-white">using Almost We Furnish</span>
+                </h1>
+                <p className="text-gray-200 mt-4 text-base sm:text-lg">
+                  Transform your space with our premium furniture collection. Experience luxury, comfort, and style in
+                  every piece.
+                </p>
+                <div className="flex gap-3 mt-6">
+                  <Link href="/products">
+                    <Button className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-2 text-base">
+                      Shop Now
+                    </Button>
+                  </Link>
+                  <Link href="/products">
+                    <Button
+                      variant="outline"
+                      className="border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-black px-6 py-2 text-base"
+                    >
+                      View Collection
+                    </Button>
+                  </Link>
+                </div>
+                <div className="flex gap-6 mt-6">
+                  {stats.map((stat) => (
+                    <div key={stat.label} className="text-center">
+                      <div className="text-xl font-bold text-yellow-400">{stat.value}</div>
+                      <div className="text-xs text-gray-300">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Desktop Text Section */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-8"
+            className="space-y-8 hidden lg:block"
           >
             <div className="space-y-4">
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-5xl lg:text-6xl font-bold leading-tight"
-              >
-                Feel the Comfort of{" "}
+              <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
+                <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
+                  Feel the Comfort of
+                </span>{" "}
                 <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
                   Resting Comfortably
                 </span>{" "}
                 <span className="text-white">using Almost We Furnish</span>
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className="text-xl text-gray-300 leading-relaxed"
-              >
+              </h1>
+              <p className="text-xl text-gray-300 leading-relaxed">
                 Transform your space with our premium furniture collection. Experience luxury, comfort, and style in
                 every piece.
-              </motion.p>
+              </p>
             </div>
-
-            {/* Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex flex-wrap gap-4"
-            >
+            <div className="flex gap-4">
               <Link href="/products">
-                <Button className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-8 py-3 text-lg hover:scale-105 transition-all duration-300">
+                <Button className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-8 py-3 text-lg">
                   Shop Now
                 </Button>
               </Link>
               <Link href="/products">
                 <Button
                   variant="outline"
-                  className="border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-black px-8 py-3 text-lg bg-transparent hover:scale-105 transition-all duration-300"
+                  className="border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-black px-8 py-3 text-lg"
                 >
                   View Collection
                 </Button>
               </Link>
-            </motion.div>
-
-            {/* Statistics */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="flex flex-wrap gap-8 pt-8"
-            >
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 1 + index * 0.1 }}
-                  className="text-center"
-                >
+            </div>
+            <div className="flex gap-8 pt-4">
+              {stats.map((stat) => (
+                <div key={stat.label} className="text-center">
                   <div className="text-3xl font-bold text-yellow-400">{stat.value}</div>
                   <div className="text-sm text-gray-400">{stat.label}</div>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
-          </motion.div>
-
-          {/* Right Auto-Sliding Image */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative"
-          >
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl w-full h-[500px]">
-              <Image
-                src={sliderImages[currentImage]}
-                alt="Luxury Bedroom"
-                fill
-                className="object-cover hover:scale-105 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             </div>
           </motion.div>
         </div>
