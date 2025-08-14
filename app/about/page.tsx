@@ -181,7 +181,7 @@ function ValuesCarousel() {
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900">
+    <div className="min-h-screen bg-gray-900">
       {/* Hero Section */}
       <section className="relative py-20 px-4">
         <div className="max-w-6xl mx-auto text-center">
@@ -191,7 +191,7 @@ export default function AboutPage() {
             transition={{ duration: 0.8 }}
             className="text-5xl md:text-7xl font-bold text-white mb-6"
           >
-            About <span className="text-yellow-400">Almost We Furnish</span>
+          <span className="text-yellow-400">About us</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 30 }}
@@ -200,8 +200,7 @@ export default function AboutPage() {
             className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
           >
             For over 15 years, we've been transforming houses into homes with our carefully curated collection of
-            premium furniture. Our passion for design and commitment to quality has made us a trusted name in home
-            furnishing.
+            premium furniture.
           </motion.p>
         </div>
       </section>
