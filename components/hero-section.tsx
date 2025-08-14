@@ -7,9 +7,9 @@ import Link from "next/link"
 import { useState, useEffect } from "react"
 
 const stats = [
-  { value: "128k+", label: "Happy Customers" },
-  { value: "20k+", label: "Products Sold" },
-  { value: "456+", label: "5-Star Reviews" },
+  { value: 128000, label: "Happy Customers", suffix: "k+" },
+  { value: 20000, label: "Products Sold", suffix: "k+" },
+  { value: 456, label: "5-Star Reviews", suffix: "+" },
 ]
 
 const sliderImages = [
@@ -22,7 +22,9 @@ const sliderImages = [
 
 export function HeroSection() {
   const [currentImage, setCurrentImage] = useState(0)
+  const [counters, setCounters] = useState(stats.map(() => 0))
 
+  // Slider effect
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % sliderImages.length)
@@ -30,13 +32,28 @@ export function HeroSection() {
     return () => clearInterval(interval)
   }, [])
 
+  // Counter animation
+  useEffect(() => {
+    const increments = stats.map((stat) => Math.ceil(stat.value / 100))
+    const interval = setInterval(() => {
+      setCounters((prev) =>
+        prev.map((count, i) => {
+          if (count < stats[i].value) {
+            const next = count + increments[i]
+            return next > stats[i].value ? stats[i].value : next
+          }
+          return count
+        })
+      )
+    }, 20)
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black">
       <div className="w-full max-w-[1400px] mx-auto px-3 sm:px-5 lg:px-6 py-10 lg:py-20">
-        {/* Mobile: Image with text overlay | Desktop: Side-by-side */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-          
-          {/* Image with overlay text for mobile */}
+          {/* Image Section */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -83,9 +100,12 @@ export function HeroSection() {
                   </Link>
                 </div>
                 <div className="flex gap-6 mt-6">
-                  {stats.map((stat) => (
+                  {stats.map((stat, i) => (
                     <div key={stat.label} className="text-center">
-                      <div className="text-xl font-bold text-yellow-400">{stat.value}</div>
+                      <div className="text-xl font-bold text-yellow-400">
+                        {Math.floor(counters[i] / (stat.suffix.includes("k") ? 1000 : 1))}
+                        {stat.suffix}
+                      </div>
                       <div className="text-xs text-gray-300">{stat.label}</div>
                     </div>
                   ))}
@@ -132,9 +152,12 @@ export function HeroSection() {
               </Link>
             </div>
             <div className="flex gap-8 pt-4">
-              {stats.map((stat) => (
+              {stats.map((stat, i) => (
                 <div key={stat.label} className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">{stat.value}</div>
+                  <div className="text-3xl font-bold text-yellow-400">
+                    {Math.floor(counters[i] / (stat.suffix.includes("k") ? 1000 : 1))}
+                    {stat.suffix}
+                  </div>
                   <div className="text-sm text-gray-400">{stat.label}</div>
                 </div>
               ))}
