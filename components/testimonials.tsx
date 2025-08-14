@@ -1,8 +1,9 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
-import { Star, Quote } from "lucide-react"
+import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 
 const testimonials = [
@@ -45,7 +46,8 @@ const testimonials = [
   {
     name: "Lisa Thompson",
     role: "Architect",
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+    image:
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
     rating: 5,
     review:
       "The attention to detail and craftsmanship is remarkable. I regularly specify their pieces for my residential projects. Clients are always thrilled with the results.",
@@ -62,61 +64,97 @@ const testimonials = [
 ]
 
 export function Testimonials() {
+  const [current, setCurrent] = useState(0)
+
+  // Auto change every 5s
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % testimonials.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const nextTestimonial = () => {
+    setCurrent((prev) => (prev + 1) % testimonials.length)
+  }
+
+  const prevTestimonial = () => {
+    setCurrent((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  }
+
   return (
     <section className="py-20 bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <h3 className="text-4xl font-bold text-white mb-4">What Our Clients Say</h3>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Don't just take our word for it. Here's what our satisfied customers have to say about their experience.
+          <p className="text-xl text-gray-300">
+            Don't just take our word for it. Here's what our satisfied customers have to say.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
+        {/* Testimonial Card */}
+        <div className="relative">
+          <AnimatePresence mode="wait">
             <motion.div
-              key={testimonial.name}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
+              key={current}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.5 }}
             >
-              <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 hover:border-yellow-500 transition-all duration-300 h-full group hover:shadow-2xl hover:shadow-yellow-500/20">
+              <Card className="bg-gradient-to-br from-gray-800 to-gray-900 border-gray-700 h-full hover:border-yellow-500 transition-all duration-300 group hover:shadow-2xl hover:shadow-yellow-500/20">
                 <CardContent className="p-8">
                   <div className="flex items-center mb-4">
                     <Quote className="w-8 h-8 text-yellow-400 mr-3" />
                     <div className="flex">
-                      {[...Array(testimonial.rating)].map((_, i) => (
+                      {[...Array(testimonials[current].rating)].map((_, i) => (
                         <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                       ))}
                     </div>
                   </div>
 
-                  <p className="text-gray-300 mb-6 leading-relaxed italic">"{testimonial.review}"</p>
+                  <p className="text-gray-300 mb-6 leading-relaxed italic">
+                    "{testimonials[current].review}"
+                  </p>
 
                   <div className="flex items-center">
                     <Image
-                      src={testimonial.image || "/placeholder.svg"}
-                      alt={testimonial.name}
+                      src={testimonials[current].image || "/placeholder.svg"}
+                      alt={testimonials[current].name}
                       width={60}
                       height={60}
                       className="w-15 h-15 rounded-full object-cover mr-4 group-hover:scale-110 transition-transform duration-300"
                     />
                     <div>
-                      <h4 className="font-bold text-white">{testimonial.name}</h4>
-                      <p className="text-yellow-400 text-sm">{testimonial.role}</p>
+                      <h4 className="font-bold text-white">{testimonials[current].name}</h4>
+                      <p className="text-yellow-400 text-sm">{testimonials[current].role}</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             </motion.div>
-          ))}
+          </AnimatePresence>
+
+          {/* Navigation buttons */}
+          <button
+            onClick={prevTestimonial}
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-gray-800 p-2 rounded-full hover:bg-yellow-500 transition"
+          >
+            <ChevronLeft className="w-6 h-6 text-white" />
+          </button>
+          <button
+            onClick={nextTestimonial}
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-800 p-2 rounded-full hover:bg-yellow-500 transition"
+          >
+            <ChevronRight className="w-6 h-6 text-white" />
+          </button>
         </div>
       </div>
     </section>

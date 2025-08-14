@@ -1,8 +1,9 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
+import { useEffect, useState } from "react"
 
 const brands = [
   {
@@ -44,15 +45,26 @@ const brands = [
 ]
 
 export function CategoryBrands() {
+  const [index, setIndex] = useState(0)
+  const [isHovered, setIsHovered] = useState(false)
+
+  useEffect(() => {
+    if (isHovered) return
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % brands.length)
+    }, 2500)
+    return () => clearInterval(timer)
+  }, [isHovered])
+
   return (
-    <section className=" bg-gray-900 mt-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-gray-900">
+      <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
           <h3 className="text-4xl font-bold text-white mb-4">Featured Brands</h3>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
@@ -60,7 +72,8 @@ export function CategoryBrands() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Desktop Grid */}
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {brands.map((brand, index) => (
             <motion.div
               key={brand.name}
@@ -69,29 +82,54 @@ export function CategoryBrands() {
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="bg-gradient-to-br from-gray-800 to-black border-gray-700 hover:border-yellow-500 transition-all duration-300 cursor-pointer group hover:shadow-2xl hover:shadow-yellow-500/20">
-                <CardContent className="p-8 text-center">
-                  <div className="relative overflow-hidden rounded-lg mb-6">
-                    <Image
-                      src={brand.logo || "/placeholder.svg"}
-                      alt={brand.name}
-                      width={300}
-                      height={200}
-                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500 rounded-lg"
-                    />
-                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300 rounded-lg"></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <h4 className="text-3xl font-bold text-white">{brand.name}</h4>
-                    </div>
-                  </div>
-                  <p className="text-gray-300 mb-2">{brand.description}</p>
-                  <p className="text-yellow-400 font-semibold">{brand.products}</p>
-                </CardContent>
-              </Card>
+              <BrandCard brand={brand} />
             </motion.div>
           ))}
         </div>
+
+        {/* Mobile Carousel */}
+        <div
+          className="block md:hidden relative w-full overflow-hidden"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={brands[index].name}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.6 }}
+            >
+              <BrandCard brand={brands[index]} />
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </section>
+  )
+}
+
+function BrandCard({ brand }: { brand: typeof brands[number] }) {
+  return (
+    <Card className="bg-gradient-to-br from-gray-800 to-black border-gray-700 hover:border-yellow-500 transition-all duration-300 cursor-pointer group hover:shadow-2xl hover:shadow-yellow-500/20">
+      <CardContent className="p-8 text-center">
+        <div className="relative overflow-hidden rounded-lg mb-6">
+          <Image
+            src={brand.logo || "/placeholder.svg"}
+            alt={brand.name}
+            width={300}
+            height={200}
+            className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500 rounded-lg"
+          />
+          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300 rounded-lg"></div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <h4 className="text-3xl font-bold text-white">{brand.name}</h4>
+          </div>
+        </div>
+        <p className="text-gray-300 mb-2">{brand.description}</p>
+        <p className="text-yellow-400 font-semibold">{brand.products}</p>
+      </CardContent>
+    </Card>
   )
 }

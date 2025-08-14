@@ -4,6 +4,7 @@ import { ProductRecommendations } from "@/components/product-recommendations"
 import { CategoryBrands } from "@/components/category-brands"
 import { Testimonials } from "@/components/testimonials"
 import { Navbar } from "@/components/navbar"
+import FAQPage from "@/components/FAQPage"
 
 export default function HomePage() {
   return (
@@ -14,6 +15,7 @@ export default function HomePage() {
       <ProductRecommendations />
       <CategoryBrands />
       <Testimonials />
+      <FAQPage />
 
       {/* Footer */}
       <footer className="bg-gray-900 border-t border-gray-800">

@@ -37,7 +37,6 @@ export function RoomCategories() {
   return (
     <section className="bg-gray-900">
       <div className="w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
