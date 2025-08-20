@@ -5,29 +5,57 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { AnimatedBackground } from "@/components/animated-background"
 
+// Stats
 const stats = [
   { value: 128000, label: "Happy Customers", suffix: "k+" },
   { value: 20000, label: "Products Sold", suffix: "k+" },
   { value: 456, label: "5-Star Reviews", suffix: "+" },
 ]
 
-const sliderImages = [
-  "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
-  "https://images.unsplash.com/photo-1615874959474-d609969a20ed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
-  "https://images.unsplash.com/photo-1595526114035-0e82b1c6d1a4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
-  "https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
-  "https://images.unsplash.com/photo-1600566752355-35792bedcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+// Slider images with their own overlay text
+const sliderItems = [
+  {
+    image:
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+    title: ["Feel the Comfort of", "Resting Comfortably", "using Almost We Furnish"],
+    description: "Transform your bedroom with our luxurious furniture collection.",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1615874959474-d609969a20ed?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+    title: ["Experience Elegance", "in Every Corner", "with Our Furniture"],
+    description: "Make your living room a masterpiece. Explore our modern, stylish.",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+    title: ["Design Your Space", "with Style & Comfort", "Almost We Furnish"],
+    description: "Premium furniture for your office or lounge. Bring sophistication and comfort together.",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1600585154526-990dced4db0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+    title: ["Luxury Living", "Redefined for You", "by Almost We Furnish"],
+    description: "Our collection blends comfort and elegance. Upgrade your interiors effortlessly.",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+    title: ["Make Every Moment", "Beautiful & Comfortable", "with Our Furniture"],
+    description: "Stylish furniture for your home. Experience the perfect combination of luxury and comfort.",
+  },
 ]
 
 export function HeroSection() {
-  const [currentImage, setCurrentImage] = useState(0)
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [counters, setCounters] = useState(stats.map(() => 0))
 
   // Slider effect
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % sliderImages.length)
+      setCurrentIndex((prev) => (prev + 1) % sliderItems.length)
     }, 3000)
     return () => clearInterval(interval)
   }, [])
@@ -43,15 +71,18 @@ export function HeroSection() {
             return next > stats[i].value ? stats[i].value : next
           }
           return count
-        })
+        }),
       )
     }, 20)
     return () => clearInterval(interval)
   }, [])
 
+  const currentSlide = sliderItems[currentIndex]
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-black via-gray-900 to-black">
-      <div className="w-full max-w-[1400px] mx-auto px-3 sm:px-5 lg:px-6 py-10 lg:py-20">
+    <section className="relative overflow-hidden bg-black pt-24 lg:pt-32">
+      <AnimatedBackground />
+      <div className="w-full max-w-[1400px] mx-auto px-3 sm:px-5 lg:px-6 py-10 lg:py-20 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {/* Image Section */}
           <motion.div
@@ -62,7 +93,7 @@ export function HeroSection() {
           >
             <div className="relative rounded-2xl overflow-hidden shadow-2xl w-full h-[450px] sm:h-[500px] lg:h-[500px]">
               <Image
-                src={sliderImages[currentImage]}
+                src={currentSlide.image || "/placeholder.svg"}
                 alt="Luxury Bedroom"
                 fill
                 className="object-cover transition-transform duration-700"
@@ -71,29 +102,20 @@ export function HeroSection() {
 
               {/* Overlay text only on mobile/tablet */}
               <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4 lg:hidden">
-                <h1 className="text-3xl sm:text-4xl font-bold leading-tight text-white">
-                  <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-                    Feel the Comfort of
-                  </span>{" "}
-                  <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-                    Resting Comfortably
-                  </span>{" "}
-                  <span className="text-white">using Almost We Furnish</span>
+                <h1 className="text-3xl sm:text-4xl font-bold leading-tight text-[#d4af37]">
+                  {currentSlide.title[0]} {currentSlide.title[1]} {currentSlide.title[2]}
                 </h1>
-                <p className="text-gray-200 mt-4 text-base sm:text-lg">
-                  Transform your space with our premium furniture collection. Experience luxury, comfort, and style in
-                  every piece.
-                </p>
+                <p className="text-gray-200 mt-4 text-base sm:text-lg">{currentSlide.description}</p>
                 <div className="flex gap-3 mt-6">
                   <Link href="/products">
-                    <Button className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-2 text-base">
+                    <Button className="bg-[#d4af37] hover:bg-yellow-600 text-black font-semibold px-6 py-2 text-base">
                       Shop Now
                     </Button>
                   </Link>
                   <Link href="/products">
                     <Button
                       variant="outline"
-                      className="border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-black px-6 py-2 text-base"
+                      className="border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-black px-6 py-2 text-base bg-transparent"
                     >
                       View Collection
                     </Button>
@@ -102,7 +124,7 @@ export function HeroSection() {
                 <div className="flex gap-6 mt-6">
                   {stats.map((stat, i) => (
                     <div key={stat.label} className="text-center">
-                      <div className="text-xl font-bold text-yellow-400">
+                      <div className="text-xl font-bold text-[#d4af37]">
                         {Math.floor(counters[i] / (stat.suffix.includes("k") ? 1000 : 1))}
                         {stat.suffix}
                       </div>
@@ -122,30 +144,21 @@ export function HeroSection() {
             className="space-y-8 hidden lg:block"
           >
             <div className="space-y-4">
-              <h1 className="text-5xl lg:text-6xl font-bold leading-tight">
-                <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-                  Feel the Comfort of
-                </span>{" "}
-                <span className="bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent">
-                  Resting Comfortably
-                </span>{" "}
-                <span className="text-white">using Almost We Furnish</span>
+              <h1 className="text-5xl lg:text-6xl font-bold leading-tight text-[#d4af37]">
+                {currentSlide.title[0]} {currentSlide.title[1]} {currentSlide.title[2]}
               </h1>
-              <p className="text-xl text-gray-300 leading-relaxed">
-                Transform your space with our premium furniture collection. Experience luxury, comfort, and style in
-                every piece.
-              </p>
+              <p className="text-xl text-gray-300 leading-relaxed">{currentSlide.description}</p>
             </div>
             <div className="flex gap-4">
               <Link href="/products">
-                <Button className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-8 py-3 text-lg">
+                <Button className="bg-[#d4af37] hover:bg-yellow-600 text-black font-semibold px-8 py-3 text-lg">
                   Shop Now
                 </Button>
               </Link>
               <Link href="/products">
                 <Button
                   variant="outline"
-                  className="border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-black px-8 py-3 text-lg"
+                  className="border-yellow-500 text-white hover:bg-yellow-500 hover:text-black px-8 py-3 text-lg bg-transparent"
                 >
                   View Collection
                 </Button>
@@ -154,7 +167,7 @@ export function HeroSection() {
             <div className="flex gap-8 pt-4">
               {stats.map((stat, i) => (
                 <div key={stat.label} className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">
+                  <div className="text-3xl font-bold text-[#d4af37]">
                     {Math.floor(counters[i] / (stat.suffix.includes("k") ? 1000 : 1))}
                     {stat.suffix}
                   </div>

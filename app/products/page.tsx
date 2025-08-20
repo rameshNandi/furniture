@@ -13,7 +13,7 @@ import Link from "next/link"
 import { categories, allProducts, type Product } from "@/lib/products"
 import { Search } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
-import { Navbar } from "@/components/navbar"
+import Navbar from "@/components/navbar"
 
 export default function ProductsPage() {
   const [searchQuery, setSearchQuery] = useState("")

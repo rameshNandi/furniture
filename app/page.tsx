@@ -3,9 +3,9 @@ import { RoomCategories } from "@/components/room-categories"
 import { ProductRecommendations } from "@/components/product-recommendations"
 import { CategoryBrands } from "@/components/category-brands"
 import { Testimonials } from "@/components/testimonials"
-import { Navbar } from "@/components/navbar"
+import Navbar from "@/components/navbar"
 import FAQPage from "@/components/FAQPage"
-import Footer from '@/components/Footer';
+import Footer from "@/components/Footer"
 
 export default function HomePage() {
   return (
@@ -17,8 +17,7 @@ export default function HomePage() {
       <CategoryBrands />
       <Testimonials />
       <FAQPage />
-<Footer />
- 
+      <Footer />
     </div>
   )
 }
